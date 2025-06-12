@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 
 namespace IngaExam2_0
@@ -8,6 +9,76 @@ namespace IngaExam2_0
         public AdminCatalogForm()
         {
             InitializeComponent();
+        }
+
+        private void AdminCatalogForm_Load(object sender, EventArgs e)
+        {
+            LoadBooks();
+        }
+
+        private void LoadBooks()
+        {
+            DataTable dt = DatabaseHelper.GetBooks();
+            dgvBooks.DataSource = dt;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            BookForm bookForm = new BookForm();
+            if (bookForm.ShowDialog() == DialogResult.OK)
+            {
+                bool success = DatabaseHelper.InsertBook(bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN);
+                if (success)
+                    MessageBox.Show("Книга додана успішно.");
+                else
+                    MessageBox.Show("Книга з таким ISBN вже існує!");
+                LoadBooks();
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvBooks.SelectedRows.Count > 0)
+            {
+                int bookId = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells["BookId"].Value);
+                string title = dgvBooks.SelectedRows[0].Cells["Title"].Value.ToString();
+                string author = dgvBooks.SelectedRows[0].Cells["Author"].Value.ToString();
+                int year = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells["Year"].Value);
+                string isbn = dgvBooks.SelectedRows[0].Cells["ISBN"].Value.ToString();
+
+                BookForm bookForm = new BookForm(bookId, title, author, year, isbn);
+                if (bookForm.ShowDialog() == DialogResult.OK)
+                {
+                    bool success = DatabaseHelper.UpdateBook(bookId, bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN);
+                    if (success)
+                        MessageBox.Show("Книгу оновлено успішно.");
+                    else
+                        MessageBox.Show("Книга з таким ISBN вже існує!");
+                    LoadBooks();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Оберіть книгу для редагування!");
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvBooks.SelectedRows.Count > 0)
+            {
+                int bookId = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells["BookId"].Value);
+                DialogResult result = MessageBox.Show("Видалити книгу?", "Підтвердження", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    DatabaseHelper.DeleteBook(bookId);
+                    LoadBooks();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Оберіть книгу для видалення!");
+            }
         }
     }
 }

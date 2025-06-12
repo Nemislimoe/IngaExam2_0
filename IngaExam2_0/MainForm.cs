@@ -21,9 +21,7 @@ namespace IngaExam2_0
             LoadChildForm(new HomePageForm());
         }
 
-        /// <summary>
         /// Метод для завантаження дочірніх форм у центральну панель.
-        /// </summary>
         private void LoadChildForm(Form childForm)
         {
             panelMain.Controls.Clear();

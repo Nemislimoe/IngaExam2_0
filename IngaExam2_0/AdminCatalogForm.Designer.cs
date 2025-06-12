@@ -3,44 +3,87 @@
     partial class AdminCatalogForm
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Label labelAdminCatalog;
+        private System.Windows.Forms.DataGridView dgvBooks;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Label lblTitle;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
+
         private void InitializeComponent()
         {
-            this.labelAdminCatalog = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.dgvBooks = new System.Windows.Forms.DataGridView();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.SuspendLayout();
             // 
-            // labelAdminCatalog
+            // lblTitle
             // 
-            this.labelAdminCatalog.AutoSize = true;
-            this.labelAdminCatalog.Font = new System.Drawing.Font("Script MT Bold", 16F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic);
-            this.labelAdminCatalog.Location = new System.Drawing.Point(100, 100);
-            this.labelAdminCatalog.Name = "labelAdminCatalog";
-            this.labelAdminCatalog.Size = new System.Drawing.Size(350, 32);
-            this.labelAdminCatalog.TabIndex = 0;
-            this.labelAdminCatalog.Text = "Адміністративний каталог книг";
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Script MT Bold", 16F);
+            this.lblTitle.Location = new System.Drawing.Point(30, 20);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(300, 32);
+            this.lblTitle.Text = "Адміністративний каталог";
+            // 
+            // dgvBooks
+            // 
+            this.dgvBooks.Location = new System.Drawing.Point(30, 70);
+            this.dgvBooks.Name = "dgvBooks";
+            this.dgvBooks.ReadOnly = true;
+            this.dgvBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBooks.Size = new System.Drawing.Size(700, 200);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(30, 290);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(100, 30);
+            this.btnAdd.Text = "Додати";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(150, 290);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(100, 30);
+            this.btnEdit.Text = "Редагувати";
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(270, 290);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(100, 30);
+            this.btnDelete.Text = "Видалити";
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // AdminCatalogForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(600, 400);
-            this.Controls.Add(this.labelAdminCatalog);
+            this.ClientSize = new System.Drawing.Size(800, 350);
+            this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.dgvBooks);
+            this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.btnEdit);
+            this.Controls.Add(this.btnDelete);
             this.Name = "AdminCatalogForm";
-            this.Text = "Admin Catalog";
+            this.Text = "Адміністративний каталог книг";
+            this.Load += new System.EventHandler(this.AdminCatalogForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
         #endregion
     }
 }

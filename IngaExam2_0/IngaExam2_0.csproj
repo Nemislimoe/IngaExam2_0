@@ -73,6 +73,13 @@
     <Compile Include="AdminCatalogForm.Designer.cs">
       <DependentUpon>AdminCatalogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookForm.Designer.cs">
+      <DependentUpon>BookForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

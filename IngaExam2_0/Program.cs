@@ -11,6 +11,8 @@ namespace IngaExam2_0
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            DatabaseHelper.InitializeDatabase();
+
             // Створюємо форму входу як діалогове вікно
             using (Form1 loginForm = new Form1())
             {
