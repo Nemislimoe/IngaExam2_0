@@ -6,17 +6,30 @@ namespace IngaExam2_0
 {
     public static class DatabaseHelper
     {
-        // Шлях до файлу бази даних
+        // Шлях до файлу бази даних (файл створиться у робочому каталозі)
         public static string ConnectionString = "Data Source=library.db;Version=3;";
 
         /// <summary>
-        /// Ініціалізація бази даних: створення таблиць Books та Rentals, якщо вони не існують.
+        /// Ініціалізація бази даних: створення таблиць Users, Books та Rentals, якщо їх не існує.
         /// </summary>
         public static void InitializeDatabase()
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
             {
                 conn.Open();
+
+                // Створення таблиці Users для збереження зареєстрованих користувачів
+                string createUsersTable = @"
+                    CREATE TABLE IF NOT EXISTS Users (
+                        UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Login TEXT NOT NULL UNIQUE,
+                        HashedPassword TEXT NOT NULL,
+                        Role TEXT NOT NULL
+                    );";
+                using (SQLiteCommand cmd = new SQLiteCommand(createUsersTable, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
 
                 // Створення таблиці Books
                 string createBooksTable = @"
@@ -50,7 +63,63 @@ namespace IngaExam2_0
         }
 
         /// <summary>
-        /// Повертає дані з таблиці Books з можливістю фільтрації за назвою або автором.
+        /// Отримання користувача з бази за логіном.
+        /// Повертається DataRow, якщо користувача знайдено, або null.
+        /// </summary>
+        public static DataRow GetUserByLogin(string login)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
+            {
+                conn.Open();
+                string query = "SELECT * FROM Users WHERE Login = @Login";
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Login", login);
+                    SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        return dt.Rows[0];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Реєстрація нового користувача.
+        /// Якщо користувач з таким логіном вже існує, метод повертає false.
+        /// </summary>
+        public static bool RegisterUser(string login, string hashedPassword, string role)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
+            {
+                conn.Open();
+                // Перевіряємо, чи існує користувач із таким логіном
+                string dupQuery = "SELECT COUNT(*) FROM Users WHERE Login = @Login";
+                using (SQLiteCommand dupCmd = new SQLiteCommand(dupQuery, conn))
+                {
+                    dupCmd.Parameters.AddWithValue("@Login", login);
+                    long count = (long)dupCmd.ExecuteScalar();
+                    if (count > 0)
+                        return false;
+                }
+                // Вставка нового користувача
+                string insertQuery = "INSERT INTO Users (Login, HashedPassword, Role) VALUES (@Login, @HashedPassword, @Role)";
+                using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Login", login);
+                    cmd.Parameters.AddWithValue("@HashedPassword", hashedPassword);
+                    cmd.Parameters.AddWithValue("@Role", role);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return true;
+        }
+
+        // Методи для роботи з книгам та орендою (як і раніше)
+
+        /// <summary>
+        /// Повертає список книг за опціональним фільтром (пошук по Title або Author).
         /// </summary>
         public static DataTable GetBooks(string filter = "")
         {
@@ -70,9 +139,7 @@ namespace IngaExam2_0
         }
 
         /// <summary>
-        /// Оренда книги:
-        /// Перевіряється, чи книга має статус "в наявності". Якщо так, вставляється запис в таблицю Rentals,
-        /// а статус книги оновлюється на "в оренді".
+        /// Оренда книги: перевіряється статус книги, потім вставляємо запис до Rentals і оновлюємо статус книги.
         /// </summary>
         public static bool RentBook(int bookId, int userId)
         {
@@ -80,7 +147,6 @@ namespace IngaExam2_0
             {
                 conn.Open();
 
-                // Перевірка статусу книги
                 string checkQuery = "SELECT Status FROM Books WHERE BookId = @BookId";
                 using (SQLiteCommand checkCmd = new SQLiteCommand(checkQuery, conn))
                 {
@@ -92,7 +158,6 @@ namespace IngaExam2_0
 
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    // Вставка запису оренди
                     string insertQuery = "INSERT INTO Rentals (UserId, BookId, RentDate) VALUES (@UserId, @BookId, @RentDate)";
                     using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
                     {
@@ -102,7 +167,6 @@ namespace IngaExam2_0
                         insertCmd.ExecuteNonQuery();
                     }
 
-                    // Оновлення статусу книги
                     string updateQuery = "UPDATE Books SET Status = 'в оренді' WHERE BookId = @BookId";
                     using (SQLiteCommand updateCmd = new SQLiteCommand(updateQuery, conn))
                     {
@@ -117,7 +181,7 @@ namespace IngaExam2_0
         }
 
         /// <summary>
-        /// Отримання історії оренди для заданого користувача.
+        /// Повертає історію оренди для заданого користувача із таблиці Rentals.
         /// </summary>
         public static DataTable GetRentalHistory(int userId)
         {
@@ -141,7 +205,7 @@ namespace IngaExam2_0
         }
 
         /// <summary>
-        /// Додавання нової книги. Перед вставкою виконується перевірка унікальності ISBN.
+        /// Додавання нової книги з перевіркою унікальності ISBN.
         /// </summary>
         public static bool InsertBook(string title, string author, int year, string isbn, string status = "в наявності")
         {
@@ -149,7 +213,6 @@ namespace IngaExam2_0
             {
                 conn.Open();
 
-                // Перевірка на дублювання ISBN
                 string dupQuery = "SELECT COUNT(*) FROM Books WHERE ISBN = @ISBN";
                 using (SQLiteCommand dupCmd = new SQLiteCommand(dupQuery, conn))
                 {
@@ -174,7 +237,7 @@ namespace IngaExam2_0
         }
 
         /// <summary>
-        /// Оновлення інформації про книгу з перевіркою дублювання ISBN (крім поточної книги).
+        /// Оновлення даних про книгу із перевіркою дублювання ISBN.
         /// </summary>
         public static bool UpdateBook(int bookId, string title, string author, int year, string isbn)
         {
@@ -182,7 +245,6 @@ namespace IngaExam2_0
             {
                 conn.Open();
 
-                // Перевірка дублювання ISBN для інших книг
                 string dupQuery = "SELECT COUNT(*) FROM Books WHERE ISBN = @ISBN AND BookId <> @BookId";
                 using (SQLiteCommand dupCmd = new SQLiteCommand(dupQuery, conn))
                 {

@@ -43,11 +43,17 @@ namespace IngaExam2_0
         // Обробник кнопки "Каталог"
         private void btnCatalog_Click(object sender, EventArgs e)
         {
-            // Завантаження відповідної форми залежно від ролі користувача
-            if (CurrentRole == "Admin")
-                LoadChildForm(new AdminCatalogForm());
-            else
-                LoadChildForm(new UserCatalogForm());
+            try
+            {
+                if (CurrentRole == "Admin")
+                    LoadChildForm(new AdminCatalogForm());
+                else
+                    LoadChildForm(new UserCatalogForm());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка при завантаженні каталогу: " + ex.Message);
+            }
         }
 
         // Обробник кнопки "Вихід" – повертаємося до форми входу
