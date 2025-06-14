@@ -9,9 +9,7 @@ namespace IngaExam2_0
         // Шлях до файлу бази даних (файл створиться у робочому каталозі)
         public static string ConnectionString = "Data Source=library.db;Version=3;";
 
-        /// <summary>
         /// Ініціалізація бази даних: створення таблиць Users, Books та Rentals, якщо їх не існує.
-        /// </summary>
         public static void InitializeDatabase()
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -62,10 +60,8 @@ namespace IngaExam2_0
             }
         }
 
-        /// <summary>
         /// Отримання користувача з бази за логіном.
         /// Повертається DataRow, якщо користувача знайдено, або null.
-        /// </summary>
         public static DataRow GetUserByLogin(string login)
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -85,10 +81,9 @@ namespace IngaExam2_0
             return null;
         }
 
-        /// <summary>
         /// Реєстрація нового користувача.
         /// Якщо користувач з таким логіном вже існує, метод повертає false.
-        /// </summary>
+        
         public static bool RegisterUser(string login, string hashedPassword, string role)
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -118,9 +113,8 @@ namespace IngaExam2_0
 
         // Методи для роботи з книгам та орендою (як і раніше)
 
-        /// <summary>
         /// Повертає список книг за опціональним фільтром (пошук по Title або Author).
-        /// </summary>
+        
         public static DataTable GetBooks(string filter = "")
         {
             DataTable dt = new DataTable();
@@ -138,9 +132,8 @@ namespace IngaExam2_0
             return dt;
         }
 
-        /// <summary>
         /// Оренда книги: перевіряється статус книги, потім вставляємо запис до Rentals і оновлюємо статус книги.
-        /// </summary>
+        
         public static bool RentBook(int bookId, int userId)
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -180,9 +173,8 @@ namespace IngaExam2_0
             return true;
         }
 
-        /// <summary>
         /// Повертає історію оренди для заданого користувача із таблиці Rentals.
-        /// </summary>
+
         public static DataTable GetRentalHistory(int userId)
         {
             DataTable dt = new DataTable();
@@ -204,9 +196,8 @@ namespace IngaExam2_0
             return dt;
         }
 
-        /// <summary>
         /// Додавання нової книги з перевіркою унікальності ISBN.
-        /// </summary>
+        
         public static bool InsertBook(string title, string author, int year, string isbn, string status = "в наявності")
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -236,9 +227,8 @@ namespace IngaExam2_0
             return true;
         }
 
-        /// <summary>
         /// Оновлення даних про книгу із перевіркою дублювання ISBN.
-        /// </summary>
+
         public static bool UpdateBook(int bookId, string title, string author, int year, string isbn)
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
@@ -269,9 +259,8 @@ namespace IngaExam2_0
             return true;
         }
 
-        /// <summary>
         /// Видалення книги за її ідентифікатором.
-        /// </summary>
+        
         public static bool DeleteBook(int bookId)
         {
             using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))

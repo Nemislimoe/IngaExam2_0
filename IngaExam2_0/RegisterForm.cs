@@ -71,7 +71,7 @@ namespace IngaExam2_0
         }
         private void RegisterForm_Load(object sender, EventArgs e)
         {
-            // Можна виконати ініціалізацію, або залишити порожнім.
+
         }
 
         private string HashPassword(string password)

@@ -56,7 +56,7 @@ namespace IngaExam2_0
             }
         }
 
-        // Обробник кнопки "Вихід" – повертаємося до форми входу
+        // Обробник кнопки "Вихід" 
         private void btnLogout_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -70,6 +70,3 @@ namespace IngaExam2_0
         }
     }
 }
-
-//
-//
