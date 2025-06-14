@@ -61,6 +61,7 @@ namespace IngaExam2_0
         {
             this.Hide();
             new Form1().Show();
+            this.Close();
         }
 
         private void panelMain_Paint(object sender, PaintEventArgs e)
