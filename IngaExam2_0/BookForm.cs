@@ -18,8 +18,10 @@ namespace IngaExam2_0
             }
         }
         public string ISBN => txtISBN.Text.Trim();
+        // Властивість для дати повернення
+        public DateTime ReturnDate => dtpReturnDate.Value;
 
-        // Конструктор для добавления книги
+        // Конструктор для додавання книги
         public BookForm()
         {
             InitializeComponent();
@@ -27,13 +29,15 @@ namespace IngaExam2_0
         }
 
         // Конструктор для редагування книги
-        public BookForm(int bookId, string title, string author, int year, string isbn) : this()
+        public BookForm(int bookId, string title, string author, int year, string isbn, DateTime returnDate)
+            : this()
         {
             BookId = bookId;
             txtTitle.Text = title;
             txtAuthor.Text = author;
             txtYear.Text = year.ToString();
             txtISBN.Text = isbn;
+            dtpReturnDate.Value = returnDate;
             this.Text = "Редагувати книгу";
         }
 
@@ -55,7 +59,7 @@ namespace IngaExam2_0
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
-
+        
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
@@ -64,7 +68,7 @@ namespace IngaExam2_0
 
         private void BookForm_Load(object sender, EventArgs e)
         {
-
+            dtpReturnDate.Value = DateTime.Today;
         }
     }
 }

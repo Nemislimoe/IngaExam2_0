@@ -114,8 +114,8 @@
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelSideMenu);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.MaximizeBox = true;
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Головне вікно";

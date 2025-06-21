@@ -27,7 +27,7 @@ namespace IngaExam2_0
             BookForm bookForm = new BookForm();
             if (bookForm.ShowDialog() == DialogResult.OK)
             {
-                bool success = DatabaseHelper.InsertBook(bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN);
+                bool success = DatabaseHelper.InsertBook(bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN, bookForm.ReturnDate);
                 if (success)
                     MessageBox.Show("Book was added successfully.");
                 else
@@ -45,11 +45,12 @@ namespace IngaExam2_0
                 string author = dgvBooks.SelectedRows[0].Cells["Author"].Value.ToString();
                 int year = Convert.ToInt32(dgvBooks.SelectedRows[0].Cells["Year"].Value);
                 string isbn = dgvBooks.SelectedRows[0].Cells["ISBN"].Value.ToString();
-
-                BookForm bookForm = new BookForm(bookId, title, author, year, isbn);
+                // Отримуємо DueDate з таблиці – припустимо, що ім'я колонки – "DueDate"
+                DateTime dueDate = Convert.ToDateTime(dgvBooks.SelectedRows[0].Cells["DueDate"].Value);
+                BookForm bookForm = new BookForm(bookId, title, author, year, isbn, dueDate);
                 if (bookForm.ShowDialog() == DialogResult.OK)
                 {
-                    bool success = DatabaseHelper.UpdateBook(bookId, bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN);
+                    bool success = DatabaseHelper.UpdateBook(bookId, bookForm.BookTitle, bookForm.Author, bookForm.Year, bookForm.ISBN, bookForm.ReturnDate);
                     if (success)
                         MessageBox.Show("Book was updated successfully.");
                     else
@@ -62,6 +63,7 @@ namespace IngaExam2_0
                 MessageBox.Show("Choose a book to edit!");
             }
         }
+
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
