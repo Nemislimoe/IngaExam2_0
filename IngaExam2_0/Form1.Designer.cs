@@ -42,7 +42,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Script MT Bold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(220, 186);
+            this.label2.Location = new System.Drawing.Point(210, 186);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 24);
             this.label2.TabIndex = 1;
@@ -86,7 +86,7 @@
             this.buttonRegister.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.buttonRegister.Location = new System.Drawing.Point(449, 309);
             this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(150, 38);
+            this.buttonRegister.Size = new System.Drawing.Size(160, 38);
             this.buttonRegister.TabIndex = 5;
             this.buttonRegister.Text = "Registration";
             this.buttonRegister.UseVisualStyleBackColor = false;
